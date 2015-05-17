@@ -19,8 +19,9 @@ Vagrant.configure(2) do |config|
 	config.vm.synced_folder "salt/app/roots/", "/srv/"
 	config.vm.hostname = "app"
 	config.vm.network "private_network", ip: "192.168.99.2"
-    config.vm.network "forwarded_port", guest: 5432, host: 15432
-    config.vm.network "forwarded_port", guest: 8080, host: 8080    
+    config.vm.network "forwarded_port", guest: 443, host: 443     # apache ssl
+    config.vm.network "forwarded_port", guest: 5432, host: 15432    # postgresql
+
 	config.vm.provider "virtualbox" do |v|
 	  v.memory = 2048
 	  v.cpus = 1
@@ -39,7 +40,7 @@ Vagrant.configure(2) do |config|
 	config.vm.synced_folder "salt/dbslave/roots", "/srv"	
 	config.vm.hostname = "dbslave"	
 	config.vm.network "private_network", ip: "192.168.99.3"
-    config.vm.network "forwarded_port", guest: 5432, host: 25432    
+    config.vm.network "forwarded_port", guest: 5432, host: 25432    #postgresql
 	config.vm.provider "virtualbox" do |v|
 	  v.memory = 1024
 	  v.cpus = 1
@@ -47,7 +48,7 @@ Vagrant.configure(2) do |config|
 	
 	config.vm.provision :salt do |salt|
 	   salt.minion_config = "salt/dbslave/minion"
-	   salt.run_highstate = true
+	   salt.run_highstate = false
 	   salt.install_type = "stable"
 	end
 	
