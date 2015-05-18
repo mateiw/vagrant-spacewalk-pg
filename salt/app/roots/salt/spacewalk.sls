@@ -19,6 +19,7 @@ install_spacewalk:
     - pkgs:
         - spacewalk-postgresql
 
+# TODO use salt.states.postgres_*  
 create_db:
   cmd.run:
     - name: PGPASSWORD=spacepw; createdb -E UTF8 spaceschema ; createlang plpgsql spaceschema ; createlang pltclu spaceschema ; yes $PGPASSWORD | createuser -P -sDR spaceuser
@@ -30,16 +31,12 @@ answer_file:
     file.managed:
         - name: /root/setup-answer.properties
         - source: salt://spacewalk/setup-answer.properties
-        - require:
-            - cmd: create_db 
+#        - require:
+#            - cmd: create_db 
             
 spacewalk_setup:
   cmd.run:
-    - name: spacewalk-setup --external-postgresql --answer-file=setup-answer.properties
+    - name: spacewalk-setup --external-postgresql --non-interactive --answer-file=setup-answer.properties
     - cwd: /root
     - require:
         - file: answer_file
- 
-#su - postgres -c 'PGPASSWORD=spacepw; createdb -E UTF8 spaceschema ; createlang plpgsql spaceschema ; createlang pltclu spaceschema ; yes $PGPASSWORD | createuser -P -sDR spaceuser'    
-
-#spacewalk-setup --external-postgresql --answer-file=setup-answer.properties
