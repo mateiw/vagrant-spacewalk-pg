@@ -51,6 +51,10 @@ make sure Postgresql is running:
     - require:
         - file: postgresql.conf
         
+# TODO change postgres user pass: alter user postgres with password 'password';
+# TODO change postgres system user pass
+        
+        
 create replication slot:
   cmd.run:
     - name: psql -c "SELECT * FROM pg_create_physical_replication_slot('standby_replication_slot')"
