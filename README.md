@@ -5,7 +5,7 @@ The configuration is done using [Vagrant](https://www.vagrantup.com) + [Saltstac
 ## General setup
 The setup is composed of two machines:
 * `app` (`192.168.99.2`) - runs both Spacewalk and Postgresql master node
-* `dbslave` (`192.168.99.3`)- runs the Postgresql slave
+* `dbslave` (`192.168.99.3`) - runs the Postgresql slave
 
 This is done only for the sake of simplicity. A more realistic setup would probably deploy the Postgresql master on it's own machine.
 
@@ -15,7 +15,8 @@ In case pgpool becomes a botleneck a better alternative would be pgbouncer for t
 
 Again, to keep things simple, SaltStack is configured in masterless mode. 
 ## Postgresql setup
-The database useses streaming replication 
+The idea is to use streaming replication (asynchronous) to keep the two nodes in sync. Since Postgresql does not implement any automatic failover, this has to be done using a third party tool (pgpool-II). To keep Spacewalk working without configuration changes in the event of a database failover, it's configured to point to the pgpool instance.
+
 ## How to get started
 ```sh
 $ git clone https://github.com/mateiw/vagrant-spacewalk-pg
