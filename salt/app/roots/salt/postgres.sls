@@ -13,7 +13,15 @@ install_postgres:
         - postgresql94
         - postgresql94-contrib
         - postgresql94-pltcl
-
+        
+set postgres system user password:
+  user.present:
+    - name: postgres
+    # password 'postgres'
+    - password: $6$9n2A8tWj$hAi0yx0Hs1SBNwFNJqzeyy6eXYuK.58SKgOqYYhRpw34FcYnrNsKA4WuWeSmdVCInma1crK9FV5DbVzkO8rGG.
+    - require:
+        - pkg: install_postgres 
+        
 init_db:
   cmd.run:
     - name: /usr/pgsql-9.4/bin/postgresql94-setup initdb
@@ -51,9 +59,10 @@ make sure Postgresql is running:
     - require:
         - file: postgresql.conf
         
-# TODO change postgres user pass: alter user postgres with password 'password';
-# TODO change postgres system user pass
-        
+change postgres db user pass:
+  cmd.run:
+    - name: psql -c "alter user postgres with password 'postgres'";
+    - user: postgres    
         
 create replication slot:
   cmd.run:

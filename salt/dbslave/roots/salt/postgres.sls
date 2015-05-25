@@ -14,6 +14,14 @@ install_postgres:
         - postgresql94-contrib
         - postgresql94-pltcl
         
+set postgres password:
+  user.present:
+    - name: postgres
+    # password 'postgres'
+    - password: $6$9n2A8tWj$hAi0yx0Hs1SBNwFNJqzeyy6eXYuK.58SKgOqYYhRpw34FcYnrNsKA4WuWeSmdVCInma1crK9FV5DbVzkO8rGG.        
+    - require: 
+        - pkg: install_postgres
+        
 postgres_is_stopped:
   service.dead:
     - name: postgresql-9.4
@@ -49,7 +57,9 @@ make sure Postgresql is running:
     - require:
         - file: recovery.conf
 
-        
+change postgress pass:
+  cmd.run:
+    - name: psql -c "alter user postgres with password 'postgres'";        
 #init_db:
 #  cmd.run:
 #    - name: /usr/pgsql-9.4/bin/postgresql94-setup initdb

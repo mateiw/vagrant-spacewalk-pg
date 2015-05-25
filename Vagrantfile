@@ -21,7 +21,8 @@ Vagrant.configure(2) do |config|
 	config.vm.network "private_network", ip: "192.168.99.2"
     config.vm.network "forwarded_port", guest: 443, host: 443     # apache ssl
     config.vm.network "forwarded_port", guest: 5432, host: 15432    # postgresql
-
+    config.vm.network "forwarded_port", guest: 9999, host: 9999    # pgpool
+    
 	config.vm.provider "virtualbox" do |v|
 	  v.memory = 2048
 	  v.cpus = 1
@@ -29,7 +30,7 @@ Vagrant.configure(2) do |config|
 	
 	config.vm.provision :salt do |salt|
 	   salt.minion_config = "salt/app/minion"
-	   salt.run_highstate = true
+	   salt.run_highstate = false
 	   salt.install_type = "stable"
 	end
 	

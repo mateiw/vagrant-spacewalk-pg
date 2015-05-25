@@ -25,7 +25,7 @@ create_db:
     - name: PGPASSWORD=spacepw; createdb -E UTF8 spaceschema ; createlang plpgsql spaceschema ; createlang pltclu spaceschema ; yes $PGPASSWORD | createuser -P -sDR spaceuser
     - user: postgres
     - require:
-        - pkg: install_spacewalk        
+        - pkg: install_spacewalk
  
 answer_file:
     file.managed:
