@@ -19,20 +19,43 @@ install_spacewalk:
     - pkgs:
         - spacewalk-postgresql
 
-# TODO use salt.states.postgres_*  
 create_db:
+  postgres_database.present:
+    - name: spaceschema
+    - encoding: UTF8
+
+create_lang_plpgsql:
   cmd.run:
-    - name: PGPASSWORD=spacepw; createdb -E UTF8 spaceschema ; createlang plpgsql spaceschema ; createlang pltclu spaceschema ; yes $PGPASSWORD | createuser -P -sDR spaceuser
+    - name: createlang plpgsql spaceschema
+    - user: postgres
+    - unless: createlang -d spaceschema -l | grep plpgsql
+    - require:
+        - postgres_database: create_db
+        
+create_lang_pltclu:
+  cmd.run:
+    - name: createlang pltclu spaceschema
+    - user: postgres
+    - unless: createlang -d spaceschema -l | grep pltclu
+    - require:
+        - postgres_database: create_db        
+   
+create_db_user:
+  cmd.run:
+    - name: psql -c "DROP ROLE IF EXISTS spaceuser; CREATE ROLE spaceuser PASSWORD 'spacepw' SUPERUSER CREATEDB CREATEROLE INHERIT LOGIN;"
     - user: postgres
     - require:
-        - pkg: install_spacewalk
+        - cmd: create_lang_plpgsql
+        - cmd: create_lang_pltclu
  
 answer_file:
     file.managed:
         - name: /root/setup-answer.properties
         - source: salt://spacewalk/setup-answer.properties
-#        - require:
-#            - cmd: create_db 
+            
+pgpool_running:
+  service.running:
+    - name: pgpool-II-94 
             
 spacewalk_setup:
   cmd.run:
@@ -40,3 +63,6 @@ spacewalk_setup:
     - cwd: /root
     - require:
         - file: answer_file
+        - service: pgpool_running
+        - postgres_database: create_db
+        - cmd: create_db_user

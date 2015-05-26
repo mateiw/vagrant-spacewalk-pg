@@ -57,43 +57,7 @@ make sure Postgresql is running:
     - require:
         - file: recovery.conf
 
-change postgress pass:
-  cmd.run:
-    - name: psql -c "alter user postgres with password 'postgres'";        
-#init_db:
+#change postgress pass:
 #  cmd.run:
-#    - name: /usr/pgsql-9.4/bin/postgresql94-setup initdb
-#    - onlyif: test -d /var/lib/pgsql/9.4/data && test -z "$(ls -A /var/lib/pgsql/9.4/data/)"
-#    - require:
-#        - pkg: install_postgres    
-#
-#pg_hba.conf:
-#    file.managed:
-#        - name: /var/lib/pgsql/9.4/data/pg_hba.conf
-#        - source: salt://postgresql/pg_hba.conf
-#        - user: postgres
-#        - group: postgres
-#        - mode: 600
-#        - require:
-#            - cmd: init_db
-#            
-#postgresql.conf:
-#    file.managed:
-#        - name: /var/lib/pgsql/9.4/data/postgresql.conf
-#        - source: salt://postgresql/postgresql.conf
-#        - user: postgres
-#        - group: postgres
-#        - mode: 600
-#        - require:
-#            - cmd: init_db
-#            
-#make sure Postgresql is running:
-#  service.running:
-#    - name: postgresql-9.4
-#    - enable: True
-#    - watch:
-#      - file: /var/lib/pgsql/9.4/data/pg_hba.conf
-#      - file: /var/lib/pgsql/9.4/data/postgresql.conf
-#    - require:
-#        - file: postgresql.conf
-#
+#    - name: psql -c "alter user postgres with password 'postgres';"
+#    - user: postgres
