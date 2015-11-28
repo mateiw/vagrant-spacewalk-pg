@@ -67,4 +67,5 @@ On `app` do:
 #### 5. Open Spacewalk in browser
 Finally, you should have everything set up. Open in the browser https://localhost and you should be greeted by the Spacewalk GUI.
 
-
+#### 6. TODO
+* change Vagrant file to use a libvirt box. 
