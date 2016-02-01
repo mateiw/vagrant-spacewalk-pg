@@ -12,10 +12,10 @@ Vagrant.configure(2) do |config|
 
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://atlas.hashicorp.com/search.
-  #config.vm.box = "chef/centos-7.0"
+  #config.vm.box = "bento/centos-7.0"
 
   config.vm.define "app" do |config|
-    config.vm.box = "chef/centos-7.0"
+    config.vm.box = "bento/centos-7.0"
 	config.vm.synced_folder "salt/app/roots/", "/srv/"
 	config.vm.hostname = "app"
 	config.vm.network "private_network", ip: "192.168.99.2"
@@ -37,7 +37,7 @@ Vagrant.configure(2) do |config|
   end
 
   config.vm.define "dbslave" do |config|
-    config.vm.box = "chef/centos-7.0"
+    config.vm.box = "bento/centos-7.0"
 	config.vm.synced_folder "salt/dbslave/roots", "/srv"	
 	config.vm.hostname = "dbslave"	
 	config.vm.network "private_network", ip: "192.168.99.3"
